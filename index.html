@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CoWork Manager - Sistema de Gerenciamento de Coworking</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+      <div class="login-container">
+        <div class="login-header">
+          <h1>CoWork Manager</h1>
+          <p>Sistema de Gerenciamento de Coworking</p>
+        </div>
+        <div class="login-buttons">
+          <button id="login-manager" class="btn btn-primary btn-large">
+            Entrar como Gerente
+          </button>
+          <button id="login-user" class="btn btn-secondary btn-large">
+            Entrar como Usuário
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Manager Dashboard -->
+    <div id="manager-dashboard" class="screen">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <h1>Painel do Gerente</h1>
+          <span id="manager-name" class="user-badge"></span>
+        </div>
+        <button id="logout-manager" class="btn btn-outline">Sair</button>
+      </header>
+
+      <nav class="dashboard-nav">
+        <button class="nav-btn active" data-tab="requests">Solicitações</button>
+        <button class="nav-btn" data-tab="history">Histórico</button>
+        <button class="nav-btn" data-tab="spaces">Espaços</button>
+        <button class="nav-btn" data-tab="resources">Recursos</button>
+        <button class="nav-btn" data-tab="occupancy">Ocupação</button>
+      </nav>
+
+      <main class="dashboard-content">
+        <!-- Requests Tab -->
+        <section id="tab-requests" class="tab-content active">
+          <div class="section-header">
+            <h2>Solicitações Pendentes</h2>
+            <span id="pending-count" class="badge">0</span>
+          </div>
+          <div id="requests-list" class="card-list">
+            <p class="empty-state">Nenhuma solicitação pendente</p>
+          </div>
+        </section>
+
+        <!-- History Tab -->
+        <section id="tab-history" class="tab-content">
+          <div class="section-header">
+            <h2>Histórico de Utilização</h2>
+            <button id="add-history-btn" class="btn btn-primary btn-small">
+              + Adicionar Manual
+            </button>
+          </div>
+
+          <!-- Manual History Form (hidden by default) -->
+          <div id="manual-history-form" class="form-card hidden">
+            <h3>Adicionar Entrada Manual</h3>
+            <form id="history-form">
+              <div class="form-group">
+                <label for="history-user">Nome do Usuário</label>
+                <input
+                  type="text"
+                  id="history-user"
+                  required
+                  placeholder="Nome completo"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="history-service">Serviço</label>
+                  <select id="history-service" required></select>
+                </div>
+                <div class="form-group">
+                  <label for="history-duration">Duração (min)</label>
+                  <input
+                    type="number"
+                    id="history-duration"
+                    required
+                    min="1"
+                    max="480"
+                    placeholder="60"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="history-price">Valor (R$)</label>
+                <input type="text" id="history-price" readonly />
+              </div>
+              <div class="form-actions">
+                <button
+                  type="button"
+                  id="cancel-history"
+                  class="btn btn-outline"
+                >
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="history-list" class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Usuário</th>
+                  <th>Serviço</th>
+                  <th>Duração</th>
+                  <th>Valor</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="history-table-body">
+                <tr class="empty-row">
+                  <td colspan="6">Nenhum registro encontrado</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Spaces Tab -->
+        <section id="tab-spaces" class="tab-content">
+          <div class="section-header">
+            <h2>Gerenciar Espaços</h2>
+            <button id="add-space-btn" class="btn btn-primary btn-small">
+              + Novo Espaço
+            </button>
+          </div>
+
+          <div id="space-form-container" class="form-card hidden">
+            <h3 id="space-form-title">Adicionar Espaço</h3>
+            <form id="space-form">
+              <input type="hidden" id="space-id" />
+              <div class="form-group">
+                <label for="space-name">Nome do Espaço</label>
+                <input
+                  type="text"
+                  id="space-name"
+                  required
+                  placeholder="Ex: Sala de Reunião A"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="space-capacity">Capacidade</label>
+                  <input
+                    type="number"
+                    id="space-capacity"
+                    required
+                    min="1"
+                    placeholder="10"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="space-price">Preço Base (R$/hora)</label>
+                  <input
+                    type="number"
+                    id="space-price"
+                    required
+                    min="0"
+                    step="0.01"
+                    placeholder="20.00"
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="space-description">Descrição</label>
+                <textarea
+                  id="space-description"
+                  rows="2"
+                  placeholder="Descrição do espaço..."
+                ></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="button" id="cancel-space" class="btn btn-outline">
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="spaces-list" class="card-grid">
+            <!-- Spaces will be rendered here -->
+          </div>
+        </section>
+
+        <!-- Resources Tab -->
+        <section id="tab-resources" class="tab-content">
+          <div class="section-header">
+            <h2>Gerenciar Recursos</h2>
+            <button id="add-resource-btn" class="btn btn-primary btn-small">
+              + Novo Recurso
+            </button>
+          </div>
+
+          <div id="resource-form-container" class="form-card hidden">
+            <h3 id="resource-form-title">Adicionar Recurso</h3>
+            <form id="resource-form">
+              <input type="hidden" id="resource-id" />
+              <div class="form-group">
+                <label for="resource-name">Nome do Recurso</label>
+                <input
+                  type="text"
+                  id="resource-name"
+                  required
+                  placeholder="Ex: Projetor HD"
+                />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="resource-quantity">Quantidade</label>
+                  <input
+                    type="number"
+                    id="resource-quantity"
+                    required
+                    min="1"
+                    placeholder="5"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="resource-available">Disponível</label>
+                  <input
+                    type="number"
+                    id="resource-available"
+                    required
+                    min="0"
+                    placeholder="5"
+                  />
+                </div>
+              </div>
+              <div class="form-actions">
+                <button
+                  type="button"
+                  id="cancel-resource"
+                  class="btn btn-outline"
+                >
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="resources-list" class="card-grid">
+            <!-- Resources will be rendered here -->
+          </div>
+        </section>
+
+        <!-- Occupancy Tab -->
+        <section id="tab-occupancy" class="tab-content">
+          <div class="section-header">
+            <h2>Monitoramento de Ocupação</h2>
+          </div>
+          <div id="occupancy-stats" class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-value" id="total-spaces">0</span>
+              <span class="stat-label">Total de Espaços</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="occupied-spaces">0</span>
+              <span class="stat-label">Espaços Ocupados</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="available-spaces">0</span>
+              <span class="stat-label">Espaços Disponíveis</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-value" id="occupancy-rate">0%</span>
+              <span class="stat-label">Taxa de Ocupação</span>
+            </div>
+          </div>
+          <div id="occupancy-details" class="occupancy-list">
+            <!-- Occupancy details will be rendered here -->
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- User Dashboard -->
+    <div id="user-dashboard" class="screen">
+      <header class="dashboard-header">
+        <div class="header-left">
+          <h1>Meu Painel</h1>
+          <span id="user-name" class="user-badge"></span>
+          <span id="user-id-badge" class="user-id"></span>
+        </div>
+        <button id="logout-user" class="btn btn-outline">Sair</button>
+      </header>
+
+      <nav class="dashboard-nav">
+        <button class="nav-btn active" data-tab="services">Serviços</button>
+        <button class="nav-btn" data-tab="my-requests">
+          Minhas Solicitações
+        </button>
+      </nav>
+
+      <main class="dashboard-content">
+        <!-- Services Tab -->
+        <section id="tab-services" class="tab-content active">
+          <div class="section-header">
+            <h2>Solicitar Serviço</h2>
+          </div>
+
+          <div class="service-request-container">
+            <div class="available-services">
+              <h3>Espaços Disponíveis</h3>
+              <div id="available-services-list" class="service-cards">
+                <!-- Available services will be rendered here -->
+              </div>
+            </div>
+
+            <div class="request-form-container">
+              <div class="form-card">
+                <h3>Nova Solicitação</h3>
+                <form id="service-request-form">
+                  <div class="form-group">
+                    <label for="selected-service">Serviço Selecionado</label>
+                    <select id="selected-service" required>
+                      <option value="">Selecione um serviço...</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="request-duration">Duração (minutos)</label>
+                    <input
+                      type="number"
+                      id="request-duration"
+                      required
+                      min="15"
+                      max="480"
+                      step="15"
+                      value="60"
+                      placeholder="60"
+                    />
+                    <span class="input-hint"
+                      >Mínimo: 15 min | Máximo: 8 horas</span
+                    >
+                  </div>
+                  <div class="price-display">
+                    <span class="price-label">Valor Total:</span>
+                    <span id="calculated-price" class="price-value"
+                      >R$ 20,00</span
+                    >
+                  </div>
+                  <div class="form-group">
+                    <label for="request-notes">Observações (opcional)</label>
+                    <textarea
+                      id="request-notes"
+                      rows="2"
+                      placeholder="Alguma observação especial..."
+                    ></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">
+                    Enviar Solicitação
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- My Requests Tab -->
+        <section id="tab-my-requests" class="tab-content">
+          <div class="section-header">
+            <h2>Minhas Solicitações</h2>
+          </div>
+          <div id="my-requests-list" class="card-list">
+            <p class="empty-state">Você ainda não fez nenhuma solicitação</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Extension Request Modal -->
+    <div id="extension-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Solicitar Extensão</h3>
+          <button class="modal-close" id="close-extension-modal">
+            &times;
+          </button>
+        </div>
+        <form id="extension-form">
+          <input type="hidden" id="extension-request-id" />
+          <div class="form-group">
+            <label for="extension-duration">Tempo Adicional (minutos)</label>
+            <input
+              type="number"
+              id="extension-duration"
+              required
+              min="15"
+              max="240"
+              step="15"
+              value="30"
+            />
+          </div>
+          <div class="price-display">
+            <span class="price-label">Valor Adicional:</span>
+            <span id="extension-price" class="price-value">R$ 10,00</span>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="cancel-extension" class="btn btn-outline">
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Solicitar Extensão
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Edit History Modal -->
+    <div id="edit-history-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Editar Registro</h3>
+          <button class="modal-close" id="close-edit-history-modal">
+            &times;
+          </button>
+        </div>
+        <form id="edit-history-form">
+          <input type="hidden" id="edit-history-id" />
+          <div class="form-group">
+            <label for="edit-history-user">Nome do Usuário</label>
+            <input type="text" id="edit-history-user" required />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="edit-history-service">Serviço</label>
+              <select id="edit-history-service" required></select>
+            </div>
+            <div class="form-group">
+              <label for="edit-history-duration">Duração (min)</label>
+              <input
+                type="number"
+                id="edit-history-duration"
+                required
+                min="1"
+                max="480"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="edit-history-price">Valor (R$)</label>
+            <input type="text" id="edit-history-price" readonly />
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              id="cancel-edit-history"
+              class="btn btn-outline"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Salvar Alterações
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">
+      <span id="toast-message"></span>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
