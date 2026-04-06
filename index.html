@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Login Screen -->
     <div id="login-screen" class="screen active">
       <div class="login-container">
         <div class="login-header">
@@ -25,7 +24,6 @@
       </div>
     </div>
 
-    <!-- Manager Dashboard -->
     <div id="manager-dashboard" class="screen">
       <header class="dashboard-header">
         <div class="header-left">
@@ -44,7 +42,6 @@
       </nav>
 
       <main class="dashboard-content">
-        <!-- Requests Tab -->
         <section id="tab-requests" class="tab-content active">
           <div class="section-header">
             <h2>Solicitações Pendentes</h2>
@@ -55,7 +52,6 @@
           </div>
         </section>
 
-        <!-- History Tab -->
         <section id="tab-history" class="tab-content">
           <div class="section-header">
             <h2>Histórico de Utilização</h2>
@@ -64,7 +60,6 @@
             </button>
           </div>
 
-          <!-- Manual History Form (hidden by default) -->
           <div id="manual-history-form" class="form-card hidden">
             <h3>Adicionar Entrada Manual</h3>
             <form id="history-form">
@@ -132,7 +127,6 @@
           </div>
         </section>
 
-        <!-- Spaces Tab -->
         <section id="tab-spaces" class="tab-content">
           <div class="section-header">
             <h2>Gerenciar Espaços</h2>
@@ -195,11 +189,9 @@
           </div>
 
           <div id="spaces-list" class="card-grid">
-            <!-- Spaces will be rendered here -->
           </div>
         </section>
 
-        <!-- Resources Tab -->
         <section id="tab-resources" class="tab-content">
           <div class="section-header">
             <h2>Gerenciar Recursos</h2>
@@ -257,11 +249,9 @@
           </div>
 
           <div id="resources-list" class="card-grid">
-            <!-- Resources will be rendered here -->
           </div>
         </section>
 
-        <!-- Occupancy Tab -->
         <section id="tab-occupancy" class="tab-content">
           <div class="section-header">
             <h2>Monitoramento de Ocupação</h2>
@@ -285,13 +275,11 @@
             </div>
           </div>
           <div id="occupancy-details" class="occupancy-list">
-            <!-- Occupancy details will be rendered here -->
           </div>
         </section>
       </main>
     </div>
 
-    <!-- User Dashboard -->
     <div id="user-dashboard" class="screen">
       <header class="dashboard-header">
         <div class="header-left">
@@ -373,7 +361,6 @@
           </div>
         </section>
 
-        <!-- My Requests Tab -->
         <section id="tab-my-requests" class="tab-content">
           <div class="section-header">
             <h2>Minhas Solicitações</h2>
@@ -385,7 +372,6 @@
       </main>
     </div>
 
-    <!-- Extension Request Modal -->
     <div id="extension-modal" class="modal hidden">
       <div class="modal-content">
         <div class="modal-header">
@@ -424,7 +410,6 @@
       </div>
     </div>
 
-    <!-- Edit History Modal -->
     <div id="edit-history-modal" class="modal hidden">
       <div class="modal-content">
         <div class="modal-header">
@@ -475,7 +460,6 @@
       </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast hidden">
       <span id="toast-message"></span>
     </div>
