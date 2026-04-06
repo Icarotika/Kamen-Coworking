@@ -8,7 +8,7 @@
 
 const store = {
   users: [
-    { id: "MGR-001", name: "Carlos Gerente", role: "manager" },
+    { id: "MGR-001", name: "Miguel - Gestor", role: "manager" },
     { id: "USR-001", name: "Maria Silva", role: "user" },
     { id: "USR-002", name: "João Santos", role: "user" },
   ],
